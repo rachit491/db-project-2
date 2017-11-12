@@ -82,10 +82,10 @@ class BasicBufferMgr {
          buff = chooseUnpinnedBuffer();
          if (buff == null)
             return null;
+         bufferPoolMap.remove(buff.block());
          buff.assignToBlock(blk);
-         
+         bufferPoolMap.put(blk, buff);
       }
-      bufferPoolMap.put(blk, buff);
       if (!buff.isPinned())
          numAvailable--;
       
@@ -95,8 +95,10 @@ class BasicBufferMgr {
 
    private Buffer findExistingBuffer(Block blk) {
       Buffer result = bufferPoolMap.get(blk);
-      System.out.println("Map"+bufferPoolMap.toString());
-      return result;
+      if(result != null)
+      	return result;
+      else
+      	return null;
    }
    
 //   private Buffer findExistingBuffer(Block blk) {
@@ -118,6 +120,7 @@ class BasicBufferMgr {
       Buffer buff = chooseUnpinnedBuffer();
       if (buff == null)
          return null;
+      bufferPoolMap.remove(buff.block());
       buff.assignToNew(filename, fmtr);
       numAvailable--;
       buff.pin();
@@ -127,8 +130,8 @@ class BasicBufferMgr {
 //   
    synchronized void unpin(Buffer buff) {
       System.out.println("unpin");
-      Block blk = buff.block();
-      bufferPoolMap.remove(blk);
+      //Block blk = buff.block();
+      //bufferPoolMap.remove(blk);
       buff.unpin();
       
       if (!buff.isPinned())
