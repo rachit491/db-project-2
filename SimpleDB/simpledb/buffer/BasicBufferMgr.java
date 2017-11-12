@@ -1,7 +1,11 @@
 package simpledb.buffer;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import simpledb.file.*;
 
@@ -11,6 +15,8 @@ import simpledb.file.*;
  *
  */
 class BasicBufferMgr {
+   private int k = 2;
+   Map<Block,ArrayList<Long>> timeMap;
    private Buffer[] bufferpool;
    private int numAvailable;
    private Map<Block, Buffer> bufferPoolMap;
@@ -29,6 +35,7 @@ class BasicBufferMgr {
     * @param numbuffs the number of buffer slots to allocate
     */
    BasicBufferMgr(int numbuffs) {
+      timeMap = new HashMap<Block,ArrayList<Long>>();
       bufferPoolMap = new HashMap<Block, Buffer>();
       bufferpool = new Buffer[numbuffs];
       numAvailable = numbuffs;
@@ -76,6 +83,7 @@ class BasicBufferMgr {
    
 //   
    synchronized Buffer pin(Block blk) {
+      
       System.out.println("pin");
       Buffer buff = findExistingBuffer(blk);
       if (buff == null) {
@@ -84,7 +92,15 @@ class BasicBufferMgr {
             return null;
          bufferPoolMap.remove(buff.block());
          buff.assignToBlock(blk);
+         ArrayList<Long> times = timeMap.get(blk);
+         timeMap.remove(blk);
+         if(times==null){
+            times = new ArrayList<Long>();
+         }
+         times.add(System.currentTimeMillis());
+         timeMap.put(blk,times);
          bufferPoolMap.put(blk, buff);
+        // buff.count = System.currentTimeMillis();
       }
       if (!buff.isPinned())
          numAvailable--;
@@ -124,6 +140,13 @@ class BasicBufferMgr {
       buff.assignToNew(filename, fmtr);
       numAvailable--;
       buff.pin();
+      ArrayList<Long> times = timeMap.get(buff.block());
+      timeMap.remove(buff.block());
+      if(times==null){
+         times = new ArrayList<Long>();
+      }
+      times.add(System.currentTimeMillis());
+      timeMap.put(buff.block(),times);
       bufferPoolMap.put(buff.block(), buff);
       return buff;
    }  
@@ -181,12 +204,43 @@ class BasicBufferMgr {
       return numAvailable;
    }
    
-   
-   
    private Buffer chooseUnpinnedBuffer() {
+      
       for (Buffer buff : bufferpool)
          if (!buff.isPinned())
-         return buff;
-      return null;
+            return buff;
+      
+      long earliestTime = Long.MAX_VALUE;
+
+      long earliestTimeLessThanK = Long.MAX_VALUE;
+      Block earliestBlock = null;
+      Block earliestBlockLessThanK = null;
+
+      for(Entry<Block,ArrayList<Long>> set:timeMap.entrySet()){
+         if(set.getValue().size()>=k&&set.getValue().get(set.getValue().size()-k)<earliestTime){
+            earliestTime = set.getValue().get(set.getValue().size()-k);
+            earliestBlock = set.getKey();
+         }
+         else if(set.getValue().size()<k){
+            earliestTimeLessThanK = Math.min(earliestTimeLessThanK,set.getValue().get(set.getValue().size()-1)); 
+            earliestBlockLessThanK = set.getKey();
+         }
+         if(earliestTimeLessThanK<earliestTime){
+            earliestTime = earliestTimeLessThanK;
+            earliestBlock = earliestBlockLessThanK;
+         }
+      }
+      Buffer earliestbuff = bufferPoolMap.get(earliestBlock);
+      
+      return earliestbuff;
    }
+   
+   boolean containsMapping(Block blk){
+      return bufferPoolMap.containsKey(blk);
+   }
+   
+   Buffer getMapping(Block blk){
+      return bufferPoolMap.get(blk);
+   }
+   
 }

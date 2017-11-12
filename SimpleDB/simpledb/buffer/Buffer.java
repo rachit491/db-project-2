@@ -34,7 +34,8 @@ public class Buffer {
     * {@link simpledb.server.SimpleDB#initFileAndLogMgr(String)} or
     * is called first.
     */
-   public Buffer() {}
+   public Buffer() {
+   }
    
    /**
     * Returns the integer value at the specified offset of the
