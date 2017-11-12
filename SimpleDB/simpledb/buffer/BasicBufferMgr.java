@@ -90,17 +90,12 @@ class BasicBufferMgr {
          numAvailable--;
       
       buff.pin();
-      
-      
-    //  System.out.println(bufferPoolMap.toString());
       return buff;
    } 
 
    private Buffer findExistingBuffer(Block blk) {
-      System.out.println("FEB");
       Buffer result = bufferPoolMap.get(blk);
-      System.out.println("BOOLK :? "+ blk);
-      System.out.println("ROULLT"+bufferPoolMap);
+      System.out.println("Map"+bufferPoolMap.toString());
       return result;
    }
    
@@ -120,9 +115,7 @@ class BasicBufferMgr {
 //   }
    
    synchronized Buffer pinNew(String filename, PageFormatter fmtr) {
-      System.out.println("pinNew");
       Buffer buff = chooseUnpinnedBuffer();
-      System.out.println("Kya idhar aa raha hai?");
       if (buff == null)
          return null;
       buff.assignToNew(filename, fmtr);
