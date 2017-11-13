@@ -224,8 +224,8 @@ class BasicBufferMgr {
                   earliestTime = set.getValue().get(set.getValue().size()-k);
                   earliestBlock = set.getKey();
                }     
-               else if(set.getValue().size()<k){
-                  earliestTimeLessThanK = Math.min(earliestTimeLessThanK,set.getValue().get(set.getValue().size()-1)); 
+               else if(set.getValue().size()<k&&earliestTimeLessThanK>set.getValue().get(set.getValue().size()-1)){
+                  earliestTimeLessThanK = set.getValue().get(set.getValue().size()-1); 
                   earliestBlockLessThanK = set.getKey();
                   flag = 1;
                }
