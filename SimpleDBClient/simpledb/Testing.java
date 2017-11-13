@@ -20,6 +20,7 @@ public class Testing {
       Block blk7 = new Block("filename.txt", 7);
       Block blk8 = new Block("filename.txt", 8);
       Block blk9 = new Block("filename.txt", 9); 
+
       BufferMgr basicBufferMgr = new BufferMgr(8);
       
 
@@ -49,6 +50,8 @@ public class Testing {
          basicBufferMgr.unpin(basicBufferMgr.getMapping(blk4));
          basicBufferMgr.unpin(basicBufferMgr.getMapping(blk2));
          basicBufferMgr.unpin(basicBufferMgr.getMapping(blk2));
+         
+         System.out.println("Last Pin 9");
          basicBufferMgr.pin(blk9);
          
          

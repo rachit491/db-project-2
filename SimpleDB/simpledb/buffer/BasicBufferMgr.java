@@ -95,20 +95,23 @@ class BasicBufferMgr {
             return null;
          bufferPoolMap.remove(buff.block());
          buff.assignToBlock(blk);
-         ArrayList<Long> times = timeMap.get(blk);
-         timeMap.remove(blk);
-         if(times==null){
-            times = new ArrayList<Long>();
-         }
-         times.add(System.currentTimeMillis());
-         timeMap.put(blk,times);
-         bufferPoolMap.put(blk, buff);
+                  bufferPoolMap.put(blk, buff);
         // buff.count = System.currentTimeMillis();
          
       }
       if (!buff.isPinned())
          numAvailable--;
       
+      ArrayList<Long> times = timeMap.get(blk);
+//    timeMap.remove(blk);
+    if(times==null){
+       times = new ArrayList<Long>();
+    }
+    times.add(System.nanoTime());
+    System.out.println("-------------------adding into list------------------");
+    System.out.println(times.size());
+    timeMap.put(blk,times);
+
       buff.pin();
       
       System.out.println("Buffer pool content");
@@ -168,7 +171,10 @@ class BasicBufferMgr {
       if(times==null){
          times = new ArrayList<Long>();
       }
-      times.add(System.currentTimeMillis());
+      times.add(System.nanoTime());
+//      Iterator it=times.iterator();
+      System.out.println("adding value-------------------------------------------");
+      System.out.println(times.size());
       timeMap.put(buff.block(),times);
       bufferPoolMap.put(buff.block(), buff);
       return buff;
@@ -235,7 +241,7 @@ class BasicBufferMgr {
    private Buffer chooseUnpinnedBuffer() {
       
       for (Buffer buff : bufferpool)
-         if (!buff.isPinned())
+         if (!buff.isPinned()&&!bufferPoolMap.containsValue(buff))
             return buff;
 //      return null;
       long earliestTime = Long.MAX_VALUE;
@@ -243,20 +249,26 @@ class BasicBufferMgr {
       long earliestTimeLessThanK = Long.MAX_VALUE;
       Block earliestBlock = null;
       Block earliestBlockLessThanK = null;
-
+      int flag= 0;
       for(Entry<Block,ArrayList<Long>> set:timeMap.entrySet()){
-         if(set.getValue().size()>=k&&set.getValue().get(set.getValue().size()-k)<earliestTime){
-            earliestTime = set.getValue().get(set.getValue().size()-k);
-            earliestBlock = set.getKey();
+         if(bufferPoolMap.get(set.getKey())==null)
+            continue;
+         if(!bufferPoolMap.get(set.getKey()).isPinned()){
+               if(set.getValue().size()>=k&&set.getValue().get(set.getValue().size()-k)<earliestTime){
+                  earliestTime = set.getValue().get(set.getValue().size()-k);
+                  earliestBlock = set.getKey();
+               }     
+               else if(set.getValue().size()<k&&earliestTimeLessThanK>set.getValue().get(set.getValue().size()-1)){
+                  earliestTimeLessThanK = set.getValue().get(set.getValue().size()-1); 
+                  earliestBlockLessThanK = set.getKey();
+                  flag = 1;
+               }
          }
-         else if(set.getValue().size()<k){
-            earliestTimeLessThanK = Math.min(earliestTimeLessThanK,set.getValue().get(set.getValue().size()-1)); 
-            earliestBlockLessThanK = set.getKey();
-         }
-         if(earliestTimeLessThanK<earliestTime){
-            earliestTime = earliestTimeLessThanK;
-            earliestBlock = earliestBlockLessThanK;
-         }
+      }
+      if(flag == 1)
+      {   
+         earliestTime = earliestTimeLessThanK;
+         earliestBlock = earliestBlockLessThanK;
       }
       Buffer earliestbuff = bufferPoolMap.get(earliestBlock);
       
