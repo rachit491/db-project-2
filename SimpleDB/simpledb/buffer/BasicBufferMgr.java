@@ -3,6 +3,7 @@ package simpledb.buffer;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -20,6 +21,8 @@ class BasicBufferMgr {
    private Buffer[] bufferpool;
    private int numAvailable;
    private Map<Block, Buffer> bufferPoolMap;
+   
+   
    
    /**
     * Creates a buffer manager having the specified number 
@@ -101,11 +104,31 @@ class BasicBufferMgr {
          timeMap.put(blk,times);
          bufferPoolMap.put(blk, buff);
         // buff.count = System.currentTimeMillis();
+         
       }
       if (!buff.isPinned())
          numAvailable--;
       
       buff.pin();
+      
+      System.out.println("Buffer pool content");
+      for(Block l:bufferPoolMap.keySet()) {
+    	  System.out.println(l);
+    	  System.out.print(bufferPoolMap.get(l).getPins());
+    	  }
+    	 
+      
+      System.out.println("----------------------");
+      
+      for(Block l:timeMap.keySet()) {
+    	  System.out.println(l);
+    	  Iterator<Long> it=timeMap.get(l).iterator();
+    	  while(it.hasNext()) {
+    		  System.out.print(it.next()+" ");
+    	  }
+    	  System.out.println();
+      }
+
       return buff;
    } 
 
@@ -155,7 +178,12 @@ class BasicBufferMgr {
       System.out.println("unpin");
       //Block blk = buff.block();
       //bufferPoolMap.remove(blk);
+    
+      
       buff.unpin();
+      
+      
+      
       
       if (!buff.isPinned())
          numAvailable++;
@@ -209,7 +237,7 @@ class BasicBufferMgr {
       for (Buffer buff : bufferpool)
          if (!buff.isPinned())
             return buff;
-      
+//      return null;
       long earliestTime = Long.MAX_VALUE;
 
       long earliestTimeLessThanK = Long.MAX_VALUE;

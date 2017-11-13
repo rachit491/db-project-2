@@ -12,19 +12,21 @@ public class Testing {
       SimpleDB.init("simpleDB");
       
       Block blk1 = new Block("filename.txt", 1);
-      Block blk2 = new Block("filename.txt", 1);
-      Block blk3 = new Block("filename.txt", 1);
-      Block blk4 = new Block("filename.txt", 1);
-      Block blk6 = new Block("filename.txt", 1);
-      Block blk7 = new Block("filename.txt", 1);
-      Block blk8 = new Block("filename.txt", 1);
-      Block blk9 = new Block("filename.txt", 1);
-      Block blk5 = new Block("filename.txt", 1);
-      
+      Block blk2 = new Block("filename.txt", 2);
+      Block blk3 = new Block("filename.txt", 3);
+      Block blk4 = new Block("filename.txt", 4);
+      Block blk5 = new Block("filename.txt", 5);
+      Block blk6 = new Block("filename.txt", 6);
+      Block blk7 = new Block("filename.txt", 7);
+      Block blk8 = new Block("filename.txt", 8);
+      Block blk9 = new Block("filename.txt", 9); 
       BufferMgr basicBufferMgr = new BufferMgr(8);
-     
+      
 
       try {
+    	  
+    	  
+    	  System.out.println("------------------------------------------------------------");
          basicBufferMgr.pin(blk1);
          basicBufferMgr.pin(blk2);
          basicBufferMgr.pin(blk3);
@@ -48,6 +50,7 @@ public class Testing {
          basicBufferMgr.unpin(basicBufferMgr.getMapping(blk2));
          basicBufferMgr.unpin(basicBufferMgr.getMapping(blk2));
          basicBufferMgr.pin(blk9);
+         
          
       }
       catch (BufferAbortException e) {}
