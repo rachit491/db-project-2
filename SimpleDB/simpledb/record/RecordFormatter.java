@@ -31,6 +31,7 @@ class RecordFormatter implements PageFormatter {
     * @see simpledb.buffer.PageFormatter#format(simpledb.file.Page)
     */
    public void format(Page page) {
+      System.out.println("RecordFormatter : format");
       int recsize = ti.recordLength() + INT_SIZE;
       for (int pos=0; pos+recsize<=BLOCK_SIZE; pos += recsize) {
          page.setInt(pos, EMPTY);

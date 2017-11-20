@@ -191,6 +191,7 @@ public class Transaction {
     * @return a reference to the newly-created disk block
     */
    public Block append(String filename, PageFormatter fmtr) {
+      System.out.println("Transaction : format");
       Block dummyblk = new Block(filename, END_OF_FILE);
       concurMgr.xLock(dummyblk);
       Block blk = myBuffers.pinNew(filename, fmtr);

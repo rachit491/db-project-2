@@ -36,6 +36,7 @@ public class BTPageFormatter implements PageFormatter {
     * @see simpledb.buffer.PageFormatter#format(simpledb.file.Page)
     */
    public void format(Page page) {
+      System.out.println("BTPageFormatter : format");
       page.setInt(0, flag);
       page.setInt(INT_SIZE, 0);  // #records = 0
       int recsize = ti.recordLength();

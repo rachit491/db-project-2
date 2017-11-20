@@ -60,6 +60,7 @@ public class SimpleDB {
     */
    public static void initFileMgr(String dirname) {
       fm = new FileMgr(dirname);
+      System.out.println("Dirname : "+ dirname);
    }
    
    /**
@@ -78,6 +79,7 @@ public class SimpleDB {
    public static void initFileLogAndBufferMgr(String dirname) {
       initFileAndLogMgr(dirname);
       bm = new BufferMgr(BUFFER_SIZE);
+      
    }
    
    /**

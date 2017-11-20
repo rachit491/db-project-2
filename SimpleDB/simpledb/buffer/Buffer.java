@@ -19,7 +19,7 @@ public class Buffer {
    private int pins = 0;
    private int modifiedBy = -1;  // negative means not modified
    private int logSequenceNumber = -1; // negative means no corresponding log record
-
+   private int id;
    /**
     * Creates a new buffer, wrapping a new 
     * {@link simpledb.file.Page page}.  
@@ -34,7 +34,7 @@ public class Buffer {
     * {@link simpledb.server.SimpleDB#initFileAndLogMgr(String)} or
     * is called first.
     */
-   public Buffer() {}
+   public Buffer(int i) {id = i;}
    
    /**
     * Returns the integer value at the specified offset of the
@@ -48,9 +48,13 @@ public class Buffer {
       return contents.getInt(offset);
    }
 
+   public int getBufferNumber()
+   {
+      return id;
+   }
    /**
     * Returns the string value at the specified offset of the
-    * buffer's page.
+    * 1buffer's page.
     * If a string was not stored at that location,
     * the behavior of the method is unpredictable.
     * @param offset the byte offset of the page
@@ -182,6 +186,7 @@ public class Buffer {
     * @param fmtr a page formatter, used to initialize the page
     */
    void assignToNew(String filename, PageFormatter fmtr) {
+      System.out.println("Buffer : assignToNew");
       flush();
       fmtr.format(contents);
       blk = contents.append(filename);

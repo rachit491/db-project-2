@@ -1,6 +1,7 @@
 package simpledb.buffer;
 
 import simpledb.file.*;
+import simpledb.server.SimpleDB;
 
 /**
  * The publicly-accessible buffer manager.
@@ -37,6 +38,7 @@ public class BufferMgr {
     */
    public BufferMgr(int numbuffers) {
       bufferMgr = new BasicBufferMgr(numbuffers);
+      
    }
    
    /**
@@ -74,6 +76,7 @@ public class BufferMgr {
     * @return the buffer pinned to that block
     */
    public synchronized Buffer pinNew(String filename, PageFormatter fmtr) {
+      System.out.println("WHy do i exist?");
       try {
          long timestamp = System.currentTimeMillis();
          Buffer buff = bufferMgr.pinNew(filename, fmtr);
