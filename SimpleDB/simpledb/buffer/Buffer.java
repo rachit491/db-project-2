@@ -19,7 +19,14 @@ public class Buffer {
    private int pins = 0;
    private int modifiedBy = -1;  // negative means not modified
    private int logSequenceNumber = -1; // negative means no corresponding log record
+
    private int id;
+
+
+   int getPins() {
+	   return pins;
+   }
+
    /**
     * Creates a new buffer, wrapping a new 
     * {@link simpledb.file.Page page}.  
@@ -34,7 +41,10 @@ public class Buffer {
     * {@link simpledb.server.SimpleDB#initFileAndLogMgr(String)} or
     * is called first.
     */
+
    public Buffer(int i) {id = i;}
+
+  
    
    /**
     * Returns the integer value at the specified offset of the

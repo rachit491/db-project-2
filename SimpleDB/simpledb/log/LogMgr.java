@@ -111,8 +111,9 @@ public class LogMgr implements Iterable<BasicLogRecord> {
       if (currentpos + recsize >= BLOCK_SIZE){ // the log record doesn't fit,
          flush();        // so move to the next block.
          appendNewBlock();
-         SimpleDB.bufferMgr().unpin(currentBuffer);
          System.out.println("Buffer unpinned : " + currentBuffer.getBufferNumber());
+         SimpleDB.bufferMgr().unpin(currentBuffer);
+        
       }
       currentBuffer = SimpleDB.bufferMgr().pin(currentblk);
       for (Object obj : rec)

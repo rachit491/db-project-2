@@ -23,6 +23,8 @@ public class BufferMgr {
    private static final long MAX_TIME = 10000; // 10 seconds
    private BasicBufferMgr bufferMgr;
    
+   
+  
    /**
     * Creates a new buffer manager having the specified 
     * number of buffers.
@@ -124,4 +126,13 @@ public class BufferMgr {
    private boolean waitingTooLong(long starttime) {
       return System.currentTimeMillis() - starttime > MAX_TIME;
    }
+   
+   public boolean containsMapping(Block blk){
+      return bufferMgr.containsMapping(blk);
+   }
+   
+   public Buffer getMapping(Block blk){
+      return bufferMgr.getMapping(blk);
+   }
+   
 }
