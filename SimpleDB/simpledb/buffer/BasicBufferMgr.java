@@ -20,7 +20,7 @@ class BasicBufferMgr {
    Map<Block,ArrayList<Long>> timeMap;
    private Buffer[] bufferpool;
    private int numAvailable;
-   private Map<Block, Buffer> bufferPoolMap;
+   public Map<Block, Buffer> bufferPoolMap;
    
    
    

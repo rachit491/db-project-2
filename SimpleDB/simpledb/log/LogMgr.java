@@ -25,7 +25,7 @@ public class LogMgr implements Iterable<BasicLogRecord> {
    public static final int LAST_POS = 0;
 
    private String logfile;
-   private Page mypage = new Page();
+   public Page mypage = new Page();
    private Block currentblk;
    private int currentpos;
    private Buffer currentBuffer;
@@ -111,8 +111,8 @@ public class LogMgr implements Iterable<BasicLogRecord> {
       if (currentpos + recsize >= BLOCK_SIZE){ // the log record doesn't fit,
          flush();        // so move to the next block.
          appendNewBlock();
-         System.out.println("Buffer unpinned : " + currentBuffer.getBufferNumber());
-         SimpleDB.bufferMgr().unpin(currentBuffer);
+        // System.out.println("Buffer unpinned : " + currentBuffer.getBufferNumber());
+       //  SimpleDB.bufferMgr().unpin(currentBuffer);
         
       }
       currentBuffer = SimpleDB.bufferMgr().pin(currentblk);
@@ -129,6 +129,7 @@ public class LogMgr implements Iterable<BasicLogRecord> {
     */
    private void appendVal(Object val) {
       System.out.println("LogMgr: appendVal");
+      System.out.println("Write to Log : " + val);
       if (val instanceof String)
          mypage.setString(currentpos, (String)val);
       else

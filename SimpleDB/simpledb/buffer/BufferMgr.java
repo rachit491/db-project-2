@@ -1,5 +1,7 @@
 package simpledb.buffer;
 
+import java.util.Map;
+
 import simpledb.file.*;
 import simpledb.server.SimpleDB;
 
@@ -23,6 +25,10 @@ public class BufferMgr {
    private static final long MAX_TIME = 10000; // 10 seconds
    private BasicBufferMgr bufferMgr;
    
+   public Map<Block, Buffer> getPool()
+   {
+      return bufferMgr.bufferPoolMap;
+   }
    
   
    /**

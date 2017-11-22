@@ -141,6 +141,7 @@ public class Page {
       contents.position(offset);
       int len = contents.getInt();
       byte[] byteval = new byte[len];
+      System.out.println(byteval + "%%%%%%");
       contents.get(byteval);
       return new String(byteval);
    }

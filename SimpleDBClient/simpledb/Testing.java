@@ -1,7 +1,9 @@
 package simpledb;
 
+import java.util.Map;
 import java.util.Scanner;
 
+import simpledb.buffer.Buffer;
 import simpledb.buffer.BufferAbortException;
 import simpledb.buffer.BufferMgr;
 import simpledb.file.Block;
@@ -27,33 +29,56 @@ public class Testing {
       BufferMgr basicBufferMgr = SimpleDB.bufferMgr();
       basicBufferMgr.pin(blk1);
       SimpleDB.logMgr().printLogPageBuffer();
+      
+     
       try {
       basicBufferMgr.pin(blk2);
       System.out.println("##### ADD BLK 2 #####");
+      Map<Block, Buffer> bufferPoolMap = basicBufferMgr.getPool(); 
+//      for(Map.Entry<Block, Buffer> index : bufferPoolMap.entrySet())
+//      {
+//         System.out.println(index.getKey());
+//         System.out.println(index.getValue().contents.getString(0));
+//      }
+      
       basicBufferMgr.pin(blk3);
       System.out.println("##### ADD BLK 3 #####");
-      basicBufferMgr.pin(blk4);
-      System.out.println("##### ADD BLK 4 #####");
-      basicBufferMgr.pin(blk5);
-      System.out.println("##### ADD BLK 5 #####");
-      basicBufferMgr.pin(blk6);
-      System.out.println("##### ADD BLK 6 #####");
-      basicBufferMgr.pin(blk7);
-      System.out.println("##### ADD BLK 7 #####");
-      basicBufferMgr.pin(blk8);
-      System.out.println("##### ADD BLK 8 #####");
-      System.out.println(basicBufferMgr.available());
+      bufferPoolMap = basicBufferMgr.getPool();
+      System.out.println("LOGMGR PAGE : ");
+      System.out.println(SimpleDB.logMgr().mypage.getString(0));
+      for(Map.Entry<Block, Buffer> index : bufferPoolMap.entrySet())
+      {
+         System.out.println(index.getKey());
+         System.out.println(index.getValue().contents.getString(0));
+      }
+      
+      
+      
+//      basicBufferMgr.pin(blk4);
+//      System.out.println("##### ADD BLK 4 #####");
+//      basicBufferMgr.pin(blk5);
+//      System.out.println("##### ADD BLK 5 #####");
+//      basicBufferMgr.pin(blk6);
+//      System.out.println("##### ADD BLK 6 #####");
+//      basicBufferMgr.pin(blk7);
+//      System.out.println("##### ADD BLK 7 #####");
+//      basicBufferMgr.pin(blk8);
+//      System.out.println("##### ADD BLK 8 #####");
+//      System.out.println(basicBufferMgr.available());
 
          
       }
       catch (BufferAbortException e) {}
-      basicBufferMgr.unpin(basicBufferMgr.getMapping(blk6));
-      System.out.println("##### UNPIN BLK 6 #####");
-      SimpleDB.logMgr().printLogPageBuffer();
-      basicBufferMgr.pin(blk7);
-      System.out.println("##### ADD BLK 6 #####");
-      basicBufferMgr.pin(blk9);
-      System.out.println("##### ADD BLK 9 #####");
+//      basicBufferMgr.unpin(basicBufferMgr.getMapping(blk6));
+//      System.out.println("##### UNPIN BLK 6 #####");
+//      SimpleDB.logMgr().printLogPageBuffer();
+//      basicBufferMgr.pin(blk7);
+//      System.out.println("##### ADD BLK 6 #####");
+//      basicBufferMgr.pin(blk9);
+//      System.out.println("##### ADD BLK 9 #####");
+      
+      //System.out.println(bufferPoolMap.toString());
+      
    }
    
    Scanner sc = new Scanner(System.in);
