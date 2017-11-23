@@ -44,8 +44,8 @@ public class Testing {
       basicBufferMgr.pin(blk3);
       System.out.println("##### ADD BLK 3 #####");
       bufferPoolMap = basicBufferMgr.getPool();
-      System.out.println("LOGMGR PAGE : ");
-      System.out.println(SimpleDB.logMgr().mypage.getString(0));
+//      System.out.println("LOGMGR PAGE : ");
+//      System.out.println(SimpleDB.logMgr().mypage.getString(0));
       for(Map.Entry<Block, Buffer> index : bufferPoolMap.entrySet())
       {
          System.out.println(index.getKey());

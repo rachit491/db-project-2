@@ -89,6 +89,7 @@ public class Page {
     */
    public synchronized void read(Block blk) {
       filemgr.read(blk, contents);
+      
    }
    
    /**

@@ -195,7 +195,7 @@ public class LogMgr implements Iterable<BasicLogRecord> {
       currentpos += INT_SIZE;
    }
 
-   private int getLastRecordPosition() {
+   public int getLastRecordPosition() {
       System.out.println("LogMgr: getLastRecordPosition");
       return mypage.getInt(LAST_POS);
    }
