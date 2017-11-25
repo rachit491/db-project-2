@@ -143,7 +143,7 @@ public class Buffer {
    /**
     * Increases the buffer's pin count.
     */
-   void pin() {
+   public void pin() {
       pins++;
    }
 
