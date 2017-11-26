@@ -238,7 +238,9 @@ public class BasicBufferMgr {
 	}
 
 	private Buffer chooseUnpinnedBuffer() {
-
+		if(SimpleDB.bufferMgr().available()==0) {
+			throw new IllegalArgumentException("All Buffers are pinned currently.");
+		}
 		for (Buffer buff : bufferpool)
 			if (!buff.isPinned() && !bufferPoolMap.containsValue(buff))
 				return buff;

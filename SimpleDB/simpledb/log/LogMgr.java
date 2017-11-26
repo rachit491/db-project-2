@@ -112,14 +112,18 @@ public class LogMgr implements Iterable<BasicLogRecord> {
       return new LogIterator(SimpleDB.bufferMgr().bufferMgr.bufferpool[0].block());
    }
    
-//   public void printLogPageBuffer()
-//   {
-//      
-//      System.out.println("Buffer number pinned to the log block:" + currentBuffer.getBufferNumber());
-//      System.out.println("Contents of Buffer :" + currentBuffer.toString());
-//      
-//            
-//   }
+   public void printLogPageBuffer()
+   {
+      
+      System.out.println("Buffer number pinned to the log block:" + currentBuffer.getBufferNumber());
+      System.out.println("Contents of Buffer " + currentBuffer.getBufferNumber()+" :");
+      Iterator<BasicLogRecord> it = iterator();
+		while (it.hasNext()) {
+			BasicLogRecord temp = it.next();
+			System.out.println(temp.nextInt() + "   " + temp.nextString());
+		}  
+            
+   }
 
    /**
     * Appends a log record to the file.
