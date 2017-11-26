@@ -79,7 +79,7 @@ public class SimpleDB {
    public static void initFileLogAndBufferMgr(String dirname) {
       initFileAndLogMgr(dirname);
       bm = new BufferMgr(BUFFER_SIZE);
-      
+      logm.realConstructor();
    }
    
    /**

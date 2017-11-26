@@ -17,10 +17,10 @@ import simpledb.server.SimpleDB;
  * @author Edward Sciore
  *
  */
-class BasicBufferMgr {
+public class BasicBufferMgr {
 	private int k = 2;
 	Map<Block, ArrayList<Long>> timeMap;
-	private Buffer[] bufferpool;
+	public Buffer[] bufferpool;
 	private int numAvailable;
 	public Map<Block, Buffer> bufferPoolMap;
 
@@ -36,16 +36,19 @@ class BasicBufferMgr {
 	 * @param numbuffs
 	 *            the number of buffer slots to allocate
 	 */
+	
 	BasicBufferMgr(int numbuffs) {
 		timeMap = new HashMap<Block, ArrayList<Long>>();
 		bufferPoolMap = new HashMap<Block, Buffer>();
 		bufferpool = new Buffer[numbuffs];
 		numAvailable = numbuffs;
-
+		
 		for (int i = 0; i < numbuffs; i++)
 			bufferpool[i] = new Buffer(i);
 		// System.out.println("YOlo");
-		SimpleDB.logMgr().realConstructor(bufferpool[0]);
+//		SimpleDB.logMgr().realConstructor();
+//		bufferPoolMap.put(bufferpool[0].block(), bufferpool[0]);
+//		pin(bufferpool[0].block());
 	}
 
 	/**
@@ -114,6 +117,7 @@ class BasicBufferMgr {
 		buff.pin();
 
 		System.out.println("Buffer pool content");
+		System.out.println(bufferPoolMap.get(bufferpool[0].block()));
 		for (Block l : bufferPoolMap.keySet()) {
 			System.out.println("Buffer no : " + findExistingBuffer(l).getBufferNumber() + "block : " + l + " pins : "
 					+ bufferPoolMap.get(l).getPins());

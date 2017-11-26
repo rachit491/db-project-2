@@ -33,6 +33,7 @@ public class Testing {
 //		SimpleDB.logMgr().printLogPageBuffer();
 
 		try {
+			
 			// basicBufferMgr.pin(blk3);
 			basicBufferMgr.pin(blk1);
 			basicBufferMgr.pin(blk2);
@@ -42,16 +43,23 @@ public class Testing {
 			basicBufferMgr.pin(blk6);
 			basicBufferMgr.pin(blk7);
 			basicBufferMgr.unpin(basicBufferMgr.getMapping(blk6));
+			basicBufferMgr.unpin(basicBufferMgr.getMapping(blk6));
+			basicBufferMgr.unpin(basicBufferMgr.getMapping(blk6));
+			basicBufferMgr.unpin(basicBufferMgr.getMapping(blk6));
+			basicBufferMgr.unpin(basicBufferMgr.getMapping(blk6));
+			basicBufferMgr.unpin(basicBufferMgr.getMapping(blk6));
+			basicBufferMgr.unpin(basicBufferMgr.getMapping(blk6));
+			
 //			basicBufferMgr.pin(blk8);
 //			basicBufferMgr.pin(blk3);
 //			System.out.println("##### ADD BLK 3 #####");
 //			System.out.println(SimpleDB.logMgr().mypage.getString(0));
-			System.out.println("Start  --->");
-			Iterator<BasicLogRecord> it = SimpleDB.logMgr().iterator();
-			while (it.hasNext()) {
-				BasicLogRecord temp = it.next();
-				System.out.println(temp.nextInt() + "   " + temp.nextString());
-			}
+//			System.out.println("Start  --->");
+//			Iterator<BasicLogRecord> it = SimpleDB.logMgr().iterator();
+//			while (it.hasNext()) {
+//				BasicLogRecord temp = it.next();
+//				System.out.println(temp.nextInt() + "   " + temp.nextString());
+//			}
 
 		} catch (BufferAbortException e) {
 		}

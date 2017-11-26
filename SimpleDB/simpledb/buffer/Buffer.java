@@ -180,7 +180,7 @@ public class Buffer {
     * of the previous page are first written to disk.
     * @param b a reference to the data block
     */
-   void assignToBlock(Block b) {
+   public void assignToBlock(Block b) {
       flush();
       blk = b;
       contents.read(blk);

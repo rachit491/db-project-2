@@ -23,14 +23,26 @@ import simpledb.server.SimpleDB;
  */
 public class BufferMgr {
    private static final long MAX_TIME = 10000; // 10 seconds
-   private BasicBufferMgr bufferMgr;
+   public BasicBufferMgr bufferMgr;
    
-   public Map<Block, Buffer> getPool()
+   public  Map<Block, Buffer> getPool()
    {
       return bufferMgr.bufferPoolMap;
    }
    
-  
+   public Buffer changeBuffer(Block block1,Block block2) {
+//	    modify bufferpool map
+	   bufferMgr.bufferPoolMap.remove(block1);
+	   bufferMgr.bufferpool[0].assignToBlock(block2);
+	   bufferMgr.bufferPoolMap.put(block2,bufferMgr.bufferpool[0]);
+	   return bufferMgr.bufferpool[0];
+   }
+   
+   public Buffer setLogBlockToBufferPool(Block block1)
+   {
+	   Buffer logBuffer = pin(block1);
+	   return logBuffer;
+   }
    /**
     * Creates a new buffer manager having the specified 
     * number of buffers.
