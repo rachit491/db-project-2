@@ -162,10 +162,17 @@ public class LogMgr implements Iterable<BasicLogRecord> {
    private void appendVal(Object val) {
       System.out.println("LogMgr: appendVal");
       System.out.println("Write to Log : " + val);
-      if (val instanceof String)
+      if (val instanceof String) {
     	  currentBuffer.contents.setString(currentpos, (String)val);
+      		System.out.println("-----------------------in logMgr currentpos is "+currentpos);
+      		System.out.println("Output thriugh bufferpool");
+      		System.out.println(SimpleDB.bufferMgr().bufferMgr.bufferpool[0].getString(currentpos));      		}
       else
-    	  currentBuffer.contents.setInt(currentpos, (Integer)val);
+      {  currentBuffer.contents.setInt(currentpos, (Integer)val);
+      	System.out.println("-----------------------in logMgr currentpos is "+currentpos);
+		System.out.println("Output thriugh bufferpool");
+		System.out.println(SimpleDB.bufferMgr().bufferMgr.bufferpool[0].getInt(currentpos));
+      }
       currentpos += size(val);
    }
 
