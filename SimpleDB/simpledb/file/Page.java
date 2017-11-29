@@ -117,7 +117,10 @@ public class Page {
     * @return the integer value at that offset
     */
    public synchronized int getInt(int offset) {
-      contents.position(offset);
+      try {
+	   contents.position(offset);}
+      catch(Exception e) {
+      }
       return contents.getInt();
    }
    
@@ -139,11 +142,13 @@ public class Page {
     * @return the string value at that offset
     */
    public synchronized String getString(int offset) {
-      contents.position(offset);
-      int len = contents.getInt();
-      byte[] byteval = new byte[len];
+	   byte[] byteval;
+	   try{
+	   contents.position(offset);
+	   int len = contents.getInt();
+	   byteval = new byte[len];      
 //      System.out.println(byteval + "%%%%%%");
-      try{
+      
     	  contents.get(byteval);
     	  }
       catch(Exception e){

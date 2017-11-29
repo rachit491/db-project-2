@@ -114,17 +114,20 @@ public class RecoveryMgr {
     * The method stops when it encounters a CHECKPOINT record
     * or the end of the log.
     */
-   private void doRecover() {
+   private void doRecover()  {
       Collection<Integer> finishedTxs = new ArrayList<Integer>();
       Iterator<LogRecord> iter = new LogRecordIterator();
       while (iter.hasNext()) {
-         LogRecord rec = iter.next();
+         try{LogRecord rec = iter.next();
          if (rec.op() == CHECKPOINT)
             return;
          if (rec.op() == COMMIT || rec.op() == ROLLBACK)
             finishedTxs.add(rec.txNumber());
          else if (!finishedTxs.contains(rec.txNumber()))
             rec.undo(txnum);
+         }catch(Exception e){
+        	 break;
+         }
       }
    }
 

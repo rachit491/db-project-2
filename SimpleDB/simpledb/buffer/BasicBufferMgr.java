@@ -279,7 +279,7 @@ public class BasicBufferMgr {
 		return bufferPoolMap.containsKey(blk);
 	}
 
-	Buffer getMapping(Block blk) {
+	public Buffer getMapping(Block blk) {
 		return bufferPoolMap.get(blk);
 	}
 
