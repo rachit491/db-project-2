@@ -32,6 +32,12 @@ public class BasicBufferMgr {
 	 *            the number of buffer slots to allocate
 	 */
 	
+	/**
+	 * Added a HashMap named bufferPoolMap & timeMap in the constructor
+	 * 
+	 * @author Team number E   
+	 */
+	
 	BasicBufferMgr(int numbuffs) {
 		timeMap = new HashMap<Block, ArrayList<Long>>();
 		bufferPoolMap = new HashMap<Block, Buffer>();
@@ -63,8 +69,14 @@ public class BasicBufferMgr {
 	 *            a reference to a disk block
 	 * @return the pinned buffer
 	 */
+	
+	/**
+	 * Modified the method to implement the LRU policy using the timeMap
+	 * 
+	 * @author Team number E   
+	 */
+	
 	synchronized Buffer pin(Block blk) {
-//		System.out.println("pin");
 		Buffer buff = findExistingBuffer(blk);
 		if (buff == null) {
 			buff = chooseUnpinnedBuffer();
@@ -95,6 +107,13 @@ public class BasicBufferMgr {
 //		}
 		return buff;
 	}
+	
+	/**
+	 * Modified this method which now finds an existing buffer in the buffer pool by using the get function
+	 * of the HashMap bufferPoolMap
+	 * 
+	 * @author Team number E   
+	 */
 
 	private Buffer findExistingBuffer(Block blk) {
 		Buffer result = bufferPoolMap.get(blk);
@@ -114,6 +133,13 @@ public class BasicBufferMgr {
 	 *            a pageformatter object, used to format the new block
 	 * @return the pinned buffer
 	 */
+	
+	/**
+	 * Modified the method to implement LRU policy using timeMap and bufferPoolMap
+	 * 
+	 * @author Team number E   
+	 */
+	
 	synchronized Buffer pinNew(String filename, PageFormatter fmtr) {
 		Buffer buff = chooseUnpinnedBuffer();
 		if (buff == null)
@@ -141,7 +167,6 @@ public class BasicBufferMgr {
 	 */
 
 	synchronized void unpin(Buffer buff) {
-//		System.out.println("unpin");
 		buff.unpin();
 		if (!buff.isPinned())
 			numAvailable++;
@@ -156,6 +181,12 @@ public class BasicBufferMgr {
 		return numAvailable;
 	}
 
+	/**
+	 * Modified the method to implement LRU policy using timeMap and bufferPoolMap
+	 * 
+	 * @author Team number E   
+	 */
+	
 	private Buffer chooseUnpinnedBuffer() {
 		if(SimpleDB.bufferMgr().available()==0) {
 			throw new IllegalArgumentException("All Buffers are pinned currently.");
@@ -194,6 +225,12 @@ public class BasicBufferMgr {
 		return earliestbuff;
 	}
 
+	/**
+	 * Added the following 3 methods for the bufferPoolMap
+	 * 
+	 * @author Team number E   
+	 */
+	
 	boolean containsMapping(Block blk) {
 		return bufferPoolMap.containsKey(blk);
 	}

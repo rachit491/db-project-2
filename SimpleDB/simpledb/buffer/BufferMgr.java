@@ -24,18 +24,35 @@ public class BufferMgr {
    private static final long MAX_TIME = 10000; // 10 seconds
    public BasicBufferMgr bufferMgr;
    
+   /**
+	 * Added the following method to get the buffer pool
+	 * 
+	 * @author Team number E   
+	 */
+   
    public  Map<Block, Buffer> getPool()
    {
       return bufferMgr.bufferPoolMap;
    }
    
+   /**
+	 * Added a function that modifies the bufferpool map
+	 * 
+	 * @author Team number E   
+	 */
+   
    public Buffer changeBuffer(Block block1,Block block2) {
-//	    modify bufferpool map
 	   bufferMgr.bufferPoolMap.remove(block1);
 	   bufferMgr.bufferpool[0].assignToBlock(block2);
 	   bufferMgr.bufferPoolMap.put(block2,bufferMgr.bufferpool[0]);
 	   return bufferMgr.bufferpool[0];
    }
+   
+   /**
+	 * Added the following method to set the log block to the buffer pool
+	 * 
+	 * @author Team number E   
+	 */
    
    public Buffer setLogBlockToBufferPool(Block block1)
    {
@@ -143,6 +160,13 @@ public class BufferMgr {
    private boolean waitingTooLong(long starttime) {
       return System.currentTimeMillis() - starttime > MAX_TIME;
    }
+   
+   /**
+	 * Added the following 2 methods to check if the buffer manager contains the mapping, and to get the mapping
+	 * for the buffer manager
+	 * 
+	 * @author Team number E   
+	 */
    
    public boolean containsMapping(Block blk){
       return bufferMgr.containsMapping(blk);

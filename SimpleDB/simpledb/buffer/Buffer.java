@@ -22,7 +22,12 @@ public class Buffer {
 
    private int id;
 
-
+   /**
+    * Added a method to get pins
+    * 
+    * @author Team number E
+    */
+   
    int getPins() {
 	   return pins;
    }

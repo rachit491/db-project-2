@@ -52,7 +52,7 @@ public class Testing {
 
 
 
-// pin all buffers one by one and check availble buffers Q.3
+// pin all buffers one by one and check available buffers Q.3
 //System.out.println("Available Buffers: "+basicBufferMgr.available());
 //// basicBufferMgr.pin(blk3);
 //basicBufferMgr.pin(blk1);

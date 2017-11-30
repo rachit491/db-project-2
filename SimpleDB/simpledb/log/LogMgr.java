@@ -48,6 +48,14 @@ public class LogMgr implements Iterable<BasicLogRecord> {
       this.logfile = logfile;
       System.out.println("logfile : "+ logfile);
    }
+   
+   /**
+	 * Added the below method that checks if logsize is 0. If it is, it appends a new block to the log.
+	 * If not, it creates a new block and sets the log block to the buffer pool and gets the last record position.
+	 * It then puts that entry in the hashMap bufferPoolMap. 
+	 * 
+	 * @author Team number E   
+	 */
 
    public void realConstructor() {
 	 int logsize = SimpleDB.fileMgr().size(logfile);
@@ -87,6 +95,12 @@ public class LogMgr implements Iterable<BasicLogRecord> {
       flush();
       return new LogIterator(currentblk);
    }
+   
+   /**
+	 * Added the below method to print out the contents of the log block buffer
+	 * 
+	 * @author Team number E   
+	 */
    
    public void printLogPageBuffer()
    {
