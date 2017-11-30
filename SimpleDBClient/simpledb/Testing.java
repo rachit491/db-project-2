@@ -1,15 +1,7 @@
 package simpledb;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Scanner;
-
-import simpledb.buffer.Buffer;
 import simpledb.buffer.BufferAbortException;
 import simpledb.buffer.BufferMgr;
 import simpledb.file.Block;
-import simpledb.file.Page;
-import simpledb.log.BasicLogRecord;
 import simpledb.server.SimpleDB;
 
 public class Testing {
@@ -31,12 +23,13 @@ public class Testing {
 		BufferMgr basicBufferMgr = SimpleDB.bufferMgr();
 		
 //		SimpleDB.logMgr().printLogPageBuffer();
-
+		
+		
+//      print bufferpool Content
+		basicBufferMgr.bufferMgr.printBufferPoolContent();
 		try {
 //			checking num of available buffers before start   Q.2
 			System.out.println("Available Buffers: "+basicBufferMgr.available());
-			// basicBufferMgr.pin(blk3);
-		
 			basicBufferMgr.pin(blk1);
 			basicBufferMgr.pin(blk2);
 			basicBufferMgr.pin(blk3);
@@ -49,17 +42,7 @@ public class Testing {
 			basicBufferMgr.pin(blk8);
 			basicBufferMgr.unpin(basicBufferMgr.getMapping(blk8));
 			basicBufferMgr.pin(blk9);
-			
-		
 			SimpleDB.logMgr().printLogPageBuffer();
-			
-//			System.out.println("Start  --->");
-//			Iterator<BasicLogRecord> it = SimpleDB.logMgr().iterator();
-//			while (it.hasNext()) {
-//				BasicLogRecord temp = it.next();
-//				System.out.println(temp.nextInt() + "   " + temp.nextString());
-//			}
-
 		} catch (BufferAbortException e) {
 		}
 	}

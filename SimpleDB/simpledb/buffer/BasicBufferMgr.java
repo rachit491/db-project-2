@@ -1,13 +1,8 @@
 package simpledb.buffer;
-
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-
 import simpledb.file.*;
 import simpledb.server.SimpleDB;
 
@@ -45,10 +40,6 @@ public class BasicBufferMgr {
 		
 		for (int i = 0; i < numbuffs; i++)
 			bufferpool[i] = new Buffer(i);
-		// System.out.println("YOlo");
-//		SimpleDB.logMgr().realConstructor();
-//		bufferPoolMap.put(bufferpool[0].block(), bufferpool[0]);
-//		pin(bufferpool[0].block());
 	}
 
 	/**
@@ -72,24 +63,8 @@ public class BasicBufferMgr {
 	 *            a reference to a disk block
 	 * @return the pinned buffer
 	 */
-	// synchronized Buffer pin(Block blk) {
-	// Buffer buff = findExistingBuffer(blk);
-	// if (buff == null) {
-	// buff = chooseUnpinnedBuffer();
-	// if (buff == null)
-	// return null;
-	// buff.assignToBlock(blk);
-	// }
-	// if (!buff.isPinned())
-	// numAvailable--;
-	// buff.pin();
-	// return buff;
-	// }
-
-	//
 	synchronized Buffer pin(Block blk) {
-
-		System.out.println("pin");
+//		System.out.println("pin");
 		Buffer buff = findExistingBuffer(blk);
 		if (buff == null) {
 			buff = chooseUnpinnedBuffer();
@@ -105,36 +80,19 @@ public class BasicBufferMgr {
 			numAvailable--;
 
 		ArrayList<Long> times = timeMap.get(blk);
-		// timeMap.remove(blk);
 		if (times == null) {
 			times = new ArrayList<Long>();
 		}
 		times.add(System.nanoTime());
-		// System.out.println("-------------------adding into list------------------");
-		// System.out.println(times.size());
 		timeMap.put(blk, times);
-
 		buff.pin();
-
-		System.out.println("Buffer pool content");
-		System.out.println(bufferPoolMap.get(bufferpool[0].block()));
-		for (Block l : bufferPoolMap.keySet()) {
-			System.out.println("Buffer no : " + findExistingBuffer(l).getBufferNumber() + "block : " + l + " pins : "
-					+ bufferPoolMap.get(l).getPins());
-			// System.out.print();
-		}
-
-		// System.out.println("----------------------");
-
-		// for(Block l:timeMap.keySet()) {
-		// System.out.println(l);
-		// Iterator<Long> it=timeMap.get(l).iterator();
-		// while(it.hasNext()) {
-		// System.out.print(it.next()+" ");
-		// }
-		// System.out.println();
-		// }
-
+		// Needed to print BufferPool Content
+//		System.out.println("Buffer pool content");
+//		System.out.println(bufferPoolMap.get(bufferpool[0].block()));
+//		for (Block l : bufferPoolMap.keySet()) {
+//			System.out.println("Buffer no : " + findExistingBuffer(l).getBufferNumber() + "block : " + l + " pins : "
+//					+ bufferPoolMap.get(l).getPins());
+//		}
 		return buff;
 	}
 
@@ -146,21 +104,16 @@ public class BasicBufferMgr {
 			return null;
 	}
 
-	// private Buffer findExistingBuffer(Block blk) {
-	// for (Buffer buff : bufferpool) {
-	// Block b = buff.block();
-	// if (b != null && b.equals(blk))
-	// {
-	// System.out.println("BOOLK :? "+ b + blk);
-	// System.out.println("Pappu :" + bufferPoolMap);
-	// return buff;
-	// }
-	//
-	// }
-	//
-	// return null;
-	// }
-
+	/**
+	 * Allocates a new block in the specified file, and pins a buffer to it. Returns
+	 * null (without allocating the block) if there are no available buffers.
+	 * 
+	 * @param filename
+	 *            the name of the file
+	 * @param fmtr
+	 *            a pageformatter object, used to format the new block
+	 * @return the pinned buffer
+	 */
 	synchronized Buffer pinNew(String filename, PageFormatter fmtr) {
 		Buffer buff = chooseUnpinnedBuffer();
 		if (buff == null)
@@ -175,46 +128,10 @@ public class BasicBufferMgr {
 			times = new ArrayList<Long>();
 		}
 		times.add(System.nanoTime());
-		// Iterator it=times.iterator();
-		// System.out.println("adding
-		// value-------------------------------------------");
-		// System.out.println(times.size());
 		timeMap.put(buff.block(), times);
 		bufferPoolMap.put(buff.block(), buff);
 		return buff;
 	}
-
-	//
-	synchronized void unpin(Buffer buff) {
-		System.out.println("unpin");
-		// Block blk = buff.block();
-		// bufferPoolMap.remove(blk);
-
-		buff.unpin();
-
-		if (!buff.isPinned())
-			numAvailable++;
-	}
-
-	/**
-	 * Allocates a new block in the specified file, and pins a buffer to it. Returns
-	 * null (without allocating the block) if there are no available buffers.
-	 * 
-	 * @param filename
-	 *            the name of the file
-	 * @param fmtr
-	 *            a pageformatter object, used to format the new block
-	 * @return the pinned buffer
-	 */
-	// synchronized Buffer pinNew(String filename, PageFormatter fmtr) {
-	// Buffer buff = chooseUnpinnedBuffer();
-	// if (buff == null)
-	// return null;
-	// buff.assignToNew(filename, fmtr);
-	// numAvailable--;
-	// buff.pin();
-	// return buff;
-	// }
 
 	/**
 	 * Unpins the specified buffer.
@@ -222,11 +139,13 @@ public class BasicBufferMgr {
 	 * @param buff
 	 *            the buffer to be unpinned
 	 */
-	// synchronized void unpin(Buffer buff) {
-	// buff.unpin();
-	// if (!buff.isPinned())
-	// numAvailable++;
-	// }
+
+	synchronized void unpin(Buffer buff) {
+//		System.out.println("unpin");
+		buff.unpin();
+		if (!buff.isPinned())
+			numAvailable++;
+	}
 
 	/**
 	 * Returns the number of available (i.e. unpinned) buffers.
@@ -282,5 +201,11 @@ public class BasicBufferMgr {
 	public Buffer getMapping(Block blk) {
 		return bufferPoolMap.get(blk);
 	}
-
+	
+	public void printBufferPoolContent() {
+		for (Block l : bufferPoolMap.keySet()) {
+			System.out.println("Buffer no : " + findExistingBuffer(l).getBufferNumber() + "\t block : " + l + "\t pins : "
+					+ bufferPoolMap.get(l).getPins());
+		}
+	}
 }

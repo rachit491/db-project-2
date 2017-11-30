@@ -3,7 +3,6 @@ package simpledb.buffer;
 import java.util.Map;
 
 import simpledb.file.*;
-import simpledb.server.SimpleDB;
 
 /**
  * The publicly-accessible buffer manager.
