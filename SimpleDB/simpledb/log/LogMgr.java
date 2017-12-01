@@ -59,8 +59,11 @@ public class LogMgr implements Iterable<BasicLogRecord> {
 
    public void realConstructor() {
 	 int logsize = SimpleDB.fileMgr().size(logfile);
-     if (logsize == 0)
+     if (logsize == 0) {
+    	currentblk =  new Block(logfile, 1);
+     	currentBuffer = SimpleDB.bufferMgr().setLogBlockToBufferPool(currentblk);
         appendNewBlock();
+     }
      else {
         currentblk = new Block(logfile, logsize-1);
         currentBuffer = SimpleDB.bufferMgr().setLogBlockToBufferPool(currentblk);
